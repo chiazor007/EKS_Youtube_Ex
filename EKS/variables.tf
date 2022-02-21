@@ -1,10 +1,13 @@
+# Input Variables
+# AWS Region
 variable "region" {
-  default     = "ap-southeast-2"
-  description = "AWS region"
+  default     = "us-east-1"
+  description = "Region in which AWS Resources to be created"
+  type = string
 }
-
+# Cluster name
 variable "cluster_name" {
-  default = "getting-started-eks"
+  default = "Cluster_name_here"
 }
 
 variable "map_accounts" {

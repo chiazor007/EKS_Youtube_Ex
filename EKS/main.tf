@@ -2,9 +2,22 @@ terraform {
   required_version = ">= 0.12.0"
 }
 
+/*
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+  required_version = "~> 1.0.0" # which means any version equal & above 0.14 like 0.15, 0.16 etc and < 1.xx
+}
+*/
+
 provider "aws" {
   version = ">= 2.28.1"
   region  = var.region
+  profile = "default"
 }
 
 data "aws_eks_cluster" "cluster" {
@@ -51,10 +64,8 @@ resource "aws_security_group" "all_worker_mgmt" {
 }
 
 module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "2.6.0"
-
-  name                 = "test-vpc"
+  source  = "./modules/aws-vpc"
+  name                 = "vpc-name-here"
   cidr                 = "10.0.0.0/16"
   azs                  = data.aws_availability_zones.available.names
   private_subnets      = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
@@ -75,7 +86,7 @@ module "vpc" {
 }
 
 module "eks" {
-  source       = "terraform-aws-modules/eks/aws"
+  source       = "./modules/aws-eks"
   cluster_name    = var.cluster_name
   cluster_version = "1.17"
   subnets         = module.vpc.private_subnets
