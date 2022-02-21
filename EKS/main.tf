@@ -64,7 +64,8 @@ resource "aws_security_group" "all_worker_mgmt" {
 }
 
 module "vpc" {
-  source  = "./modules/aws-vpc"
+  #source  = "./modules/aws-vpc"
+  source  = "terraform-aws-modules/vpc/aws"
   name                 = "vpc-name-here"
   cidr                 = "10.0.0.0/16"
   azs                  = data.aws_availability_zones.available.names
@@ -86,7 +87,8 @@ module "vpc" {
 }
 
 module "eks" {
-  source       = "./modules/aws-eks"
+  #source       = "./modules/aws-eks"
+  source       = "terraform-aws-modules/eks/aws"
   cluster_name    = var.cluster_name
   cluster_version = "1.17"
   subnets         = module.vpc.private_subnets
